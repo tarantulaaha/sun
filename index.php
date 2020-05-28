@@ -14,7 +14,8 @@ require_once './simple_html_dom.php';
 
         <title></title>
         <style>
-            body {font-family: sans-serif;font-size: 14px; margin:0; padding:0; text-align: center;}
+            body {background-color: #0d0d0d;
+color: #106000;font-family: sans-serif;font-size: 14px; margin:0; padding:0; text-align: center;}
             table{border-spacing: 0px;margin: 0px auto;margin-top: 5px;margin-bottom: 5px;}
             td{border: 1px black solid;padding: 2px;}
             input,button,select{font-size: 16px;border-radius: 5px;border: 1px black ;margin: 2px;padding: 2px;}
