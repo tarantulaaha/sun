@@ -1,4 +1,4 @@
-@font-face { font-family: Play; src: url('../font/Play-Regular.ttf'); } 
+@font-face { font-family: Play; src: url('./font/Play-Regular.ttf'); } 
 
 body {
     background-color: #0d0d0d;
@@ -21,7 +21,7 @@ table{
     font-size: 12px;
     border-spacing: 0px;
     margin: 0px auto;
-    margin-top: 5px;
+    margin-top: 5px;s
     margin-bottom: 5px;
 }
 td{
