@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHPExcel
  *
@@ -25,18 +26,18 @@
  * @version    1.8.0, 2014-03-02
  */
 
-
 /**
  * PHPExcel_WorksheetIterator
  *
  * Used to iterate worksheets in PHPExcel
  *
- * @category   PHPExcel
- * @package    PHPExcel
- * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @category PHPExcel
+ * @package PHPExcel
+ * @copyright Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_WorksheetIterator implements Iterator
 {
+
     /**
      * Spreadsheet to iterate
      *
@@ -54,7 +55,7 @@ class PHPExcel_WorksheetIterator implements Iterator
     /**
      * Create a new worksheet iterator
      *
-     * @param PHPExcel         $subject
+     * @param PHPExcel $subject
      */
     public function __construct(PHPExcel $subject = null)
     {
@@ -103,7 +104,7 @@ class PHPExcel_WorksheetIterator implements Iterator
      */
     public function next()
     {
-        ++$this->_position;
+        ++ $this->_position;
     }
 
     /**

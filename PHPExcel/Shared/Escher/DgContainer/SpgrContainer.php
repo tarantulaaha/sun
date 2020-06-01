@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHPExcel
  *
@@ -28,82 +29,84 @@
 /**
  * PHPExcel_Shared_Escher_DgContainer_SpgrContainer
  *
- * @category   PHPExcel
- * @package    PHPExcel_Shared_Escher
- * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @category PHPExcel
+ * @package PHPExcel_Shared_Escher
+ * @copyright Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Shared_Escher_DgContainer_SpgrContainer
 {
-	/**
-	 * Parent Shape Group Container
-	 *
-	 * @var PHPExcel_Shared_Escher_DgContainer_SpgrContainer
-	 */
-	private $_parent;
 
-	/**
-	 * Shape Container collection
-	 *
-	 * @var array
-	 */
-	private $_children = array();
+    /**
+     * Parent Shape Group Container
+     *
+     * @var PHPExcel_Shared_Escher_DgContainer_SpgrContainer
+     */
+    private $_parent;
 
-	/**
-	 * Set parent Shape Group Container
-	 *
-	 * @param PHPExcel_Shared_Escher_DgContainer_SpgrContainer $parent
-	 */
-	public function setParent($parent)
-	{
-		$this->_parent = $parent;
-	}
+    /**
+     * Shape Container collection
+     *
+     * @var array
+     */
+    private $_children = array();
 
-	/**
-	 * Get the parent Shape Group Container if any
-	 *
-	 * @return PHPExcel_Shared_Escher_DgContainer_SpgrContainer|null
-	 */
-	public function getParent()
-	{
-		return $this->_parent;
-	}
+    /**
+     * Set parent Shape Group Container
+     *
+     * @param PHPExcel_Shared_Escher_DgContainer_SpgrContainer $parent
+     */
+    public function setParent($parent)
+    {
+        $this->_parent = $parent;
+    }
 
-	/**
-	 * Add a child. This will be either spgrContainer or spContainer
-	 *
-	 * @param mixed $child
-	 */
-	public function addChild($child)
-	{
-		$this->_children[] = $child;
-		$child->setParent($this);
-	}
+    /**
+     * Get the parent Shape Group Container if any
+     *
+     * @return PHPExcel_Shared_Escher_DgContainer_SpgrContainer|null
+     */
+    public function getParent()
+    {
+        return $this->_parent;
+    }
 
-	/**
-	 * Get collection of Shape Containers
-	 */
-	public function getChildren()
-	{
-		return $this->_children;
-	}
+    /**
+     * Add a child.
+     * This will be either spgrContainer or spContainer
+     *
+     * @param mixed $child
+     */
+    public function addChild($child)
+    {
+        $this->_children[] = $child;
+        $child->setParent($this);
+    }
 
-	/**
-	 * Recursively get all spContainers within this spgrContainer
-	 *
-	 * @return PHPExcel_Shared_Escher_DgContainer_SpgrContainer_SpContainer[]
-	 */
-	public function getAllSpContainers()
-	{
-		$allSpContainers = array();
+    /**
+     * Get collection of Shape Containers
+     */
+    public function getChildren()
+    {
+        return $this->_children;
+    }
 
-		foreach ($this->_children as $child) {
-			if ($child instanceof PHPExcel_Shared_Escher_DgContainer_SpgrContainer) {
-				$allSpContainers = array_merge($allSpContainers, $child->getAllSpContainers());
-			} else {
-				$allSpContainers[] = $child;
-			}
-		}
+    /**
+     * Recursively get all spContainers within this spgrContainer
+     *
+     * @return PHPExcel_Shared_Escher_DgContainer_SpgrContainer_SpContainer[]
+     */
+    public function getAllSpContainers()
+    {
+        $allSpContainers = array();
 
-		return $allSpContainers;
-	}
+        foreach ($this->_children as $child) {
+            if ($child instanceof PHPExcel_Shared_Escher_DgContainer_SpgrContainer) {
+                $allSpContainers = array_merge($allSpContainers, $child->getAllSpContainers());
+            } else {
+                $allSpContainers[] = $child;
+            }
+        }
+
+        return $allSpContainers;
+    }
 }

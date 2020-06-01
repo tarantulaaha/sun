@@ -1,12 +1,10 @@
 <?php
-
 header('Content-Type: text/html; charset= utf-8');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 ini_set('memory_limit', '4096M');
 ini_set("max_execution_time", "" . (60 * 60));
-
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -19,30 +17,33 @@ ini_set("max_execution_time", "" . (60 * 60));
  *
  * @author tarantul
  */
-//date_default_timezone_set('Greenwich');
-class Moon {
+// date_default_timezone_set('Greenwich');
+class Moon
+{
 
     /**
      * Calculates the moon rise/set for a given location and day of year
      */
-    public static function calculateMoonTimes($date_in, $lat, $lon, $timezone, $summer, $recurs = false) {
+    public static function calculateMoonTimes($date_in, $lat, $lon, $timezone, $summer, $recurs = false)
+    {
         $retVal = new stdClass();
         $utrise = $utset = 0;
         $day = $date_in->format("d");
         $month = $date_in->format("m");
         $year = $date_in->format("Y");
 
-        //$timezone = (int) ($lon / 15);
-        //echo $timezone;
+        // $timezone = (int) ($lon / 15);
+        // echo $timezone;
         if ($month <= 2) {
-            $month+=12;
-            $year-=1;
-        };
+            $month += 12;
+            $year -= 1;
+        }
+        ;
         $nc = floor($year / 100);
         $vc = ((floor($nc / 3) + floor($nc / 4)) + 6) - $nc;
         $a = ($year / 19);
         $b = (($a - (int) ($a)) * 209);
-        $c = ( $b + $month + $day + $vc ) / 30;
+        $c = ($b + $month + $day + $vc) / 30;
         $MoonDay = round((($c - (int) ($c)) * 30) + 1);
         $retVal->moonDay = $MoonDay;
 
@@ -105,7 +106,7 @@ class Moon {
         $retVal->rise = $rise ? mktime($utrise['hrs'], $utrise['min'], 0, $month, $day, $year) : mktime(0, 0, 0, $month, $day + 1, $year);
         $retVal->set = $set ? mktime($utset['hrs'], $utset['min'], 0, $month, $day, $year) : mktime(0, 0, 0, $month, $day + 1, $year);
 
-        if (($retVal->rise > $retVal->set) && !$recurs) {
+        if (($retVal->rise > $retVal->set) && ! $recurs) {
             $date_nextDay = $date_in;
             $date_nextDay->add(new DateInterval('P1D'));
             $nextMoon = self::calculateMoonTimes($date_nextDay, $lat, $lon, $timezone, $summer, true);
@@ -119,22 +120,22 @@ class Moon {
     }
 
     /**
-     *      finds the parabola throuh the three points (-1,ym), (0,yz), (1, yp)
-     *  and returns the coordinates of the max/min (if any) xe, ye
-     *  the values of x where the parabola crosses zero (roots of the self::quadratic)
-     *  and the number of roots (0, 1 or 2) within the interval [-1, 1]
+     * finds the parabola throuh the three points (-1,ym), (0,yz), (1, yp)
+     * and returns the coordinates of the max/min (if any) xe, ye
+     * the values of x where the parabola crosses zero (roots of the self::quadratic)
+     * and the number of roots (0, 1 or 2) within the interval [-1, 1]
      *
-     *      well, this routine is producing sensible answers
+     * well, this routine is producing sensible answers
      *
-     *  results passed as array [nz, z1, z2, xe, ye]
+     * results passed as array [nz, z1, z2, xe, ye]
      */
-    private static function quad($ym, $yz, $yp) {
-
+    private static function quad($ym, $yz, $yp)
+    {
         $nz = $z1 = $z2 = 0;
         $a = 0.5 * ($ym + $yp) - $yz;
         $b = 0.5 * ($yp - $ym);
         $c = $yz;
-        $xe = -$b / (2 * $a);
+        $xe = - $b / (2 * $a);
         $ye = ($a * $xe + $b) * $xe + $c;
         $dis = $b * $b - 4 * $a * $c;
         if ($dis > 0) {
@@ -143,18 +144,24 @@ class Moon {
             $z2 = $xe + $dx;
             $nz = abs($z1) < 1 ? $nz + 1 : $nz;
             $nz = abs($z2) < 1 ? $nz + 1 : $nz;
-            $z1 = $z1 < -1 ? $z2 : $z1;
+            $z1 = $z1 < - 1 ? $z2 : $z1;
         }
 
-        return array($nz, $z1, $z2, $xe, $ye);
+        return array(
+            $nz,
+            $z1,
+            $z2,
+            $xe,
+            $ye
+        );
     }
 
     /**
-     *      this rather mickey mouse function takes a lot of
-     *  arguments and then returns the sine of the altitude of the moon
+     * this rather mickey mouse function takes a lot of
+     * arguments and then returns the sine of the altitude of the moon
      */
-    private static function sinAlt($mjd, $hour, $glon, $cglat, $sglat) {
-
+    private static function sinAlt($mjd, $hour, $glon, $cglat, $sglat)
+    {
         $mjd += $hour / 24;
         $t = ($mjd - 51544.5) / 36525;
         $objpos = self::minimoon($t);
@@ -168,16 +175,18 @@ class Moon {
     }
 
     /**
-     *      returns an angle in degrees in the range 0 to 360
+     * returns an angle in degrees in the range 0 to 360
      */
-    private static function degRange($x) {
+    private static function degRange($x)
+    {
         $b = $x / 360;
         $a = 360 * ($b - (int) $b);
         $retVal = $a < 0 ? $a + 360 : $a;
         return $retVal;
     }
 
-    private static function lmst($mjd, $glon) {
+    private static function lmst($mjd, $glon)
+    {
         $d = $mjd - 51544.5;
         $t = $d / 36525;
         $lst = self::degRange(280.46061839 + 360.98564736629 * $d + 0.000387933 * $t * $t - $t * $t * $t / 38710000);
@@ -189,8 +198,8 @@ class Moon {
      * claimed good to 5' (angle) in ra and 1' in dec
      * tallies with another approximate method and with ICE for a couple of dates
      */
-    private static function minimoon($t) {
-
+    private static function minimoon($t)
+    {
         $p2 = 6.283185307;
         $arc = 206264.8062;
         $coseps = 0.91748;
@@ -209,29 +218,29 @@ class Moon {
         $sinf2 = sin($f2);
 
         $dl = 22640 * sin($l);
-        $dl += -4586 * sin($l - $d2);
+        $dl += - 4586 * sin($l - $d2);
         $dl += 2370 * sin($d2);
         $dl += 769 * sin($l2);
-        $dl += -668 * $sinls;
-        $dl += -412 * $sinf2;
-        $dl += -212 * sin($l2 - $d2);
-        $dl += -206 * sin($l + $ls - $d2);
+        $dl += - 668 * $sinls;
+        $dl += - 412 * $sinf2;
+        $dl += - 212 * sin($l2 - $d2);
+        $dl += - 206 * sin($l + $ls - $d2);
         $dl += 192 * sin($l + $d2);
-        $dl += -165 * sin($ls - $d2);
-        $dl += -125 * sin($d);
-        $dl += -110 * sin($l + $ls);
+        $dl += - 165 * sin($ls - $d2);
+        $dl += - 125 * sin($d);
+        $dl += - 110 * sin($l + $ls);
         $dl += 148 * sin($l - $ls);
-        $dl += -55 * sin($f2 - $d2);
+        $dl += - 55 * sin($f2 - $d2);
 
         $s = $f + ($dl + 412 * $sinf2 + 541 * $sinls) / $arc;
         $h = $f - $d2;
-        $n = -526 * sin($h);
+        $n = - 526 * sin($h);
         $n += 44 * sin($l + $h);
-        $n += -31 * sin(-$l + $h);
-        $n += -23 * sin($ls + $h);
-        $n += 11 * sin(-$ls + $h);
-        $n += -25 * sin(-$l2 + $f);
-        $n += 21 * sin(-$l + $f);
+        $n += - 31 * sin(- $l + $h);
+        $n += - 23 * sin($ls + $h);
+        $n += 11 * sin(- $ls + $h);
+        $n += - 25 * sin(- $l2 + $f);
+        $n += 21 * sin(- $l + $f);
 
         $L_moon = $p2 * self::frac($lo + $dl / 1296000);
         $B_moon = (18520.0 * sin($s) + $n) / $arc;
@@ -247,13 +256,17 @@ class Moon {
         $ra = (48 / $p2) * atan($y / ($x + $rho));
         $ra = $ra < 0 ? $ra + 24 : $ra;
 
-        return array($dec, $ra);
+        return array(
+            $dec,
+            $ra
+        );
     }
 
     /**
-     *      returns the self::fractional part of x as used in self::minimoon and minisun
+     * returns the self::fractional part of x as used in self::minimoon and minisun
      */
-    private static function frac($x) {
+    private static function frac($x)
+    {
         $x -= (int) $x;
         return $x < 0 ? $x + 1 : $x;
     }
@@ -263,17 +276,17 @@ class Moon {
      * modified julian day number defined as mjd = jd - 2400000.5
      * checked OK for Greg era dates - 26th Dec 02
      */
-    private static function modifiedJulianDate($month, $day, $year) {
-
+    private static function modifiedJulianDate($month, $day, $year)
+    {
         if ($month <= 2) {
             $month += 12;
-            $year--;
+            $year --;
         }
 
         $a = 10000 * $year + 100 * $month + $day;
         $b = 0;
         if ($a <= 15821004.1) {
-            $b = -2 * (int) (($year + 4716) / 4) - 1179;
+            $b = - 2 * (int) (($year + 4716) / 4) - 1179;
         } else {
             $b = (int) ($year / 400) - (int) ($year / 100) + (int) ($year / 4);
         }
@@ -285,22 +298,26 @@ class Moon {
     /**
      * Converts an hours decimal to hours and minutes
      */
-    private static function convertTime($hours) {
-
+    private static function convertTime($hours)
+    {
         $hrs = (int) ($hours * 60 + 0.5) / 60.0;
         $h = (int) ($hrs);
         $m = (int) (60 * ($hrs - $h) + 0.5);
-        return array('hrs' => $h, 'min' => $m);
+        return array(
+            'hrs' => $h,
+            'min' => $m
+        );
     }
-
 }
 
-class srs2 {
+class srs2
+{
 
-    function NOD($A) {
+    function NOD($A)
+    {
         $n = count($A);
         $x = abs($A[0]);
-        for ($i = 1; $i < $n; $i++) {
+        for ($i = 1; $i < $n; $i ++) {
             $y = abs($A[$i]);
             while ($x && $y) {
                 $x > $y ? $x %= $y : $y %= $x;
@@ -310,7 +327,8 @@ class srs2 {
         return $x;
     }
 
-    function getGreenwichTime() {
+    function getGreenwichTime()
+    {
         $ts = time();
         $dy = date('I', $ts);
         $date = new DateTime();
@@ -323,20 +341,24 @@ class srs2 {
     }
 
     /**
-     * @param Array $params передаваемые параметры:
-     *      ['dateTimeString'] в формате 'd.m.Y H:i:s'
+     *
+     * @param Array $params
+     *            передаваемые параметры:
+     *            ['dateTimeString'] в формате 'd.m.Y H:i:s'
      */
-    function getSecondsFrom1900($params = []) {
+    function getSecondsFrom1900($params = [])
+    {
         $inDate = DateTime::createFromFormat("d.m.Y H:i:s", $params['dateTimeString']);
         $result = ($inDate->format("H") * 60 * 60) + ($inDate->format("i") * 60) + $inDate->format("s");
         for ($ldate = DateTime::createFromFormat("d.m.Y", "01.01.1900"); $ldate->format("d.m.Y") !== $inDate->format("d.m.Y"); $ldate->add(new DateInterval('P1D'))) {
-            $result+=24 * 60 * 60;
+            $result += 24 * 60 * 60;
             // echo $result . " - " . $ldate->format("d.m.Y") . "\n";
         }
         return $result;
     }
 
-    function getSunset($date, $long = 13.408056, $lat = 52.518611, $sunrise = true, $diff = 3) {
+    function getSunset($date, $long = 13.408056, $lat = 52.518611, $sunrise = true, $diff = 3)
+    {
         $zenith = 90.8333333333;
         $D2R = M_PI / 180;
         $R2D = 180 / M_PI;
@@ -373,23 +395,15 @@ class srs2 {
         $cosH_A = (cos(108 * $D2R) - ($sinDec * sin($lat * $D2R))) / ($cosDec * cos($lat * $D2R));
         $H = 0;
         if ($sunrise) {
-            if ($cosH > 1) {
-                
-            }
-            if ($cosH < -1) {
-                
-            }
+            if ($cosH > 1) {}
+            if ($cosH < - 1) {}
             $H = 360 - $R2D * acos($cosH);
             $H_G = 360 - $R2D * acos($cosH_G);
             $H_N = 360 - $R2D * acos($cosH_N);
             $H_A = 360 - $R2D * acos($cosH_A);
         } else {
-            if ($cosH > 1) {
-                
-            }
-            if ($cosH < -1) {
-                
-            }
+            if ($cosH > 1) {}
+            if ($cosH < - 1) {}
             $H = $R2D * acos($cosH);
             $H_G = $R2D * acos($cosH_G);
             $H_N = $R2D * acos($cosH_N);
@@ -406,8 +420,6 @@ class srs2 {
         $T_N = $H_N + $RA - (0.06571 * $t) - 6.622;
         $T_A = $H_A + $RA - (0.06571 * $t) - 6.622;
 
-
-
         $UT = $T - $lnHour;
         $UT_G = $T_G - $lnHour;
         $UT_N = $T_N - $lnHour;
@@ -422,7 +434,7 @@ class srs2 {
             $UT_G = $UT_G - 24;
         } else if ($UT_G < 0) {
             $UT_G = $UT_G + 24;
-        }   
+        }
         if ($UT_N > 24) {
             $UT_N = $UT_N - 24;
         } else if ($UT_N < 0) {
@@ -433,36 +445,36 @@ class srs2 {
         } else if ($UT_A < 0) {
             $UT_A = $UT_A + 24;
         }
-        
+
         $millisec = $date->format("U") + round($UT * 3600) + $diff;
 
         $millisec_G = $date->format("U") + round($UT_G * 3600) + $diff;
         $millisec_N = $date->format("U") + round($UT_N * 3600) + $diff;
         $millisec_A = $date->format("U") + round($UT_A * 3600) + $diff;
-        
-        if(is_nan($millisec)){
-            $millisec=0;
+
+        if (is_nan($millisec)) {
+            $millisec = 0;
         }
-        if(is_nan($millisec_G)){
-            $millisec_G=0;
+        if (is_nan($millisec_G)) {
+            $millisec_G = 0;
         }
-        if(is_nan($millisec_N)){
-            $millisec_N=0;
+        if (is_nan($millisec_N)) {
+            $millisec_N = 0;
         }
-        if(is_nan($millisec_A)){
-            $millisec_A=0;
+        if (is_nan($millisec_A)) {
+            $millisec_A = 0;
         }
-        
-              
+
         $result["o"] = DateTime::createFromFormat("U", $millisec);
         $result["g"] = DateTime::createFromFormat("U", $millisec_G);
         $result["n"] = DateTime::createFromFormat("U", $millisec_N);
         $result["a"] = DateTime::createFromFormat("U", $millisec_A);
-        //echo $result->format("d.m.Y H:i:s");
+        // echo $result->format("d.m.Y H:i:s");
         return $result;
     }
 
-    function get($day, $month, $year, $longitude, $latitude, $diff) {
+    function get($day, $month, $year, $longitude, $latitude, $diff)
+    {
         $summer = $this->getGreenwichTime();
         $tz = round($diff / (60 * 60));
         $diff = /* ($summer["summer"] * 3600)+ */($tz * 3600);
@@ -487,7 +499,7 @@ class srs2 {
         $result["sr_sumerki_g"] = $date_sr_sumerki_g->format("H:i:s");
         $result["sr_sumerki_n"] = $date_sr_sumerki_n->format("H:i:s");
         $result["sr_sumerki_a"] = $date_sr_sumerki_a->format("H:i:s");
-        
+
         $result["ss_sumerki_g"] = $date_ss_sumerki_g->format("H:i:s");
         $result["ss_sumerki_n"] = $date_ss_sumerki_n->format("H:i:s");
         $result["ss_sumerki_a"] = $date_ss_sumerki_a->format("H:i:s");
@@ -502,22 +514,21 @@ class srs2 {
         /*
          * ot zenita do zenita
          */
-        //sun
+        // sun
         $date_P = DateTime::createFromFormat("d.m.Y", $day . "." . $month . "." . $year);
         $date_P->setTimezone(new DateTimeZone('Greenwich'));
         $date_P->setTime(23, 59, 59);
         $date_P->add(new DateInterval('PT1S'));
 
-
         $next_sr = $this->getSunset($date_P, $longitude, $latitude, true, $diff)["o"];
         $next_ss = $this->getSunset($date_P, $longitude, $latitude, false, $diff)["o"];
         $next_zenit = DateTime::createFromFormat("U", round((($next_ss->format("U") - $next_sr->format("U")) / 2) + $next_sr->format("U"), 0));
 
-        $todayZZ = $date_zenit->format("U") - $date_ss->format("U"); //segodnya ot zenita do zakata
-        $todatZP = $date_ss->format("U") - $date_P->format("U"); //segodnya ot zakata do polunochi
+        $todayZZ = $date_zenit->format("U") - $date_ss->format("U"); // segodnya ot zenita do zakata
+        $todatZP = $date_ss->format("U") - $date_P->format("U"); // segodnya ot zakata do polunochi
 
-        $nextDayVZ = $next_sr->format("U") - $next_zenit->format("U"); //zavtra ot voskhoda do zenita
-        $nextDayPV = $date_P->format("U") - $next_sr->format("U"); //zavtra ot polunochi do voshoda
+        $nextDayVZ = $next_sr->format("U") - $next_zenit->format("U"); // zavtra ot voskhoda do zenita
+        $nextDayPV = $date_P->format("U") - $next_sr->format("U"); // zavtra ot polunochi do voshoda
         $test1 = ($todatZP + $nextDayPV);
         if ($test1 !== 0) {
             $dateZZ = ($todayZZ + $nextDayVZ) / $test1;
@@ -526,28 +537,28 @@ class srs2 {
         }
 
         $result["day_night"] = round($dateZZ, 3);
-        //moon
-        //----------------------
-        /* $nextMoon = Moon::calculateMoonTimes($date_P->format("d"), $date_P->format("m"), $date_P->format("y"), $latitude, $longitude, $tz, $summer["summer"]);
-          $next_mr = $nextMoon->rise;
-          $next_ms = $nextMoon->set;
-
-          $next_moon_zenit;
-          $todayMoonZZ;
-          $todatMoonZP;
-          $nextDayMoonVZ;
-          $nextDayMoonZP;
-          $dateMoonZZ;
+        // moon
+        // ----------------------
+        /*
+         * $nextMoon = Moon::calculateMoonTimes($date_P->format("d"), $date_P->format("m"), $date_P->format("y"), $latitude, $longitude, $tz, $summer["summer"]);
+         * $next_mr = $nextMoon->rise;
+         * $next_ms = $nextMoon->set;
+         *
+         * $next_moon_zenit;
+         * $todayMoonZZ;
+         * $todatMoonZP;
+         * $nextDayMoonVZ;
+         * $nextDayMoonZP;
+         * $dateMoonZZ;
          */
         $moon = Moon::calculateMoonTimes($date_in, $latitude, $longitude, $tz, $summer["summer"]);
         $date_mr = DateTime::createFromFormat("U", $moon->rise + $diff);
 
-        //$result["moonIsRise"] = $moon->isRise;
-        //$result["moonIsSet"] = $moon->isSet;
+        // $result["moonIsRise"] = $moon->isRise;
+        // $result["moonIsSet"] = $moon->isSet;
 
         $result["moonRise"] = $date_mr->format("d.m.Y H:i:s");
         $date_ms = DateTime::createFromFormat("U", $moon->set + $diff);
-
 
         // $mzv = $moon->visible / 2;
         // $mz = $mzv + $date_mr->format("U");
@@ -555,23 +566,26 @@ class srs2 {
         $date_moonzenit = DateTime::createFromFormat("U", $moon->zenit + $diff);
         $result["moonZenit"] = $date_moonzenit->format("d.m.Y H:i:s");
         $result["moonSet"] = $date_ms->format("d.m.Y H:i:s");
-        //$result["moonDay"] = $moon->moonDay;
+        // $result["moonDay"] = $moon->moonDay;
         $result["moonVisible"] = floor($moon->visible / 60);
         $result["moonInvisible"] = floor($moon->invisible / 60);
         $result["visible_invisible"] = $result["moonVisible"] . "/" . $result["moonInvisible"];
-        if ($result["moonInvisible"] <> 0) {
+        if ($result["moonInvisible"] != 0) {
             $result["visible_invisible_real"] = round($result["moonVisible"] / $result["moonInvisible"], 3);
         } else {
             $result["visible_invisible_real"] = $result["moonVisible"];
         }
-        $nod = $this->NOD(Array($result["moonVisible"], $result["moonInvisible"]));
+        $nod = $this->NOD(Array(
+            $result["moonVisible"],
+            $result["moonInvisible"]
+        ));
         $result["visible_invisible_nod"] = ($result["moonVisible"] / $nod) . "/" . ($result["moonInvisible"] / $nod);
-
 
         return $result;
     }
 
-    function getZenit($day, $month, $year, $longitude, $latitude, $diff) {
+    function getZenit($day, $month, $year, $longitude, $latitude, $diff)
+    {
         $summer = $this->getGreenwichTime();
         $tz = round($diff / (60 * 60));
         $diff = /* ($summer["summer"] * 3600)+ */($tz * 3600);
@@ -598,7 +612,8 @@ class srs2 {
         return $result;
     }
 
-    function getT2($day, $month, $year, $longitude, $latitude, $diff) {
+    function getT2($day, $month, $year, $longitude, $latitude, $diff)
+    {
         $result = Array();
         $diff = floor($diff / (60 * 60));
         $date = DateTime::createFromFormat("d.m.Y", $day . "." . $month . "." . $year);
@@ -609,7 +624,8 @@ class srs2 {
         return $result;
     }
 
-    function getT3($day, $month, $year, $longitude, $latitude, $diff) {
+    function getT3($day, $month, $year, $longitude, $latitude, $diff)
+    {
         $diff = floor($diff / (60 * 60));
         $date = DateTime::createFromFormat("d.m.Y H:i:s", $day . "." . $month . "." . $year . " 12:00:00");
         $s = "http://api.sunrise-sunset.org/json?lat={$latitude}&lng={$longitude}&date=" . $date->format("Y-m-d");
@@ -621,21 +637,21 @@ class srs2 {
             $date_sr->add(new DateInterval("PT{$diff}H"));
         }
         if ($diff < 0) {
-            $date_sr->sub(new DateInterval("PT" . ($diff * -1) . "H"));
+            $date_sr->sub(new DateInterval("PT" . ($diff * - 1) . "H"));
         }
         $date_ss = DateTime::createFromFormat("d.m.Y h:i:s A", $day . "." . $month . "." . $year . " {$res->results->sunset}");
         if ($diff > 0) {
             $date_ss->add(new DateInterval("PT{$diff}H"));
         }
         if ($diff < 0) {
-            $date_ss->sub(new DateInterval("PT" . ($diff * -1) . "H"));
+            $date_ss->sub(new DateInterval("PT" . ($diff * - 1) . "H"));
         }
         $date_zenit = DateTime::createFromFormat("U", round((($date_ss->format("U") - $date_sr->format("U")) / 2) + $date_sr->format("U"), 0));
         if ($diff > 0) {
             $date_zenit->add(new DateInterval("PT{$diff}H"));
         }
         if ($diff < 0) {
-            $date_zenit->sub(new DateInterval("PT" . ($diff * -1) . "H"));
+            $date_zenit->sub(new DateInterval("PT" . ($diff * - 1) . "H"));
         }
         $result["sunRise"] = $date_sr->format("H:i:s");
         $result["sunSet"] = $date_ss->format("H:i:s");
@@ -644,18 +660,21 @@ class srs2 {
         $result["night"] = round((24 * 60) - $result["day"], 0);
         $result["day_night"] = $result["day"] . "/" . $result["night"];
         $result["day_night_real"] = round($result["day"] / $result["night"], 3);
-        $nod = $this->NOD(Array($result["day"], $result["night"]));
+        $nod = $this->NOD(Array(
+            $result["day"],
+            $result["night"]
+        ));
         $result["day_night_nod"] = ($result["day"] / $nod) . "/" . ($result["night"] / $nod);
         return $result;
     }
-
 }
 
 $srs = new srs2();
 
-//$srs->get(25, 6, 1990, -74.3, 40.9);
-//print_r($srs->get(25, 8, 2015, 30.500000, 50.400000));
-function cleanData(&$str) {
+// $srs->get(25, 6, 1990, -74.3, 40.9);
+// print_r($srs->get(25, 8, 2015, 30.500000, 50.400000));
+function cleanData(&$str)
+{
     $str = preg_replace("/\t/", "\\t", $str);
     $str = preg_replace("/\r?\n/", "\\n", $str);
     if (strstr($str, '"')) {
@@ -669,12 +688,12 @@ switch (@$_REQUEST['cmd']) {
         $result = $srs->get($time->format("d"), $time->format("m"), $time->format("Y"), $_REQUEST['long'], $_REQUEST['lat'], $_REQUEST['diff']);
         echo json_encode($result);
         break; /*
-      case 'getT2':
-      $time = DateTime::createFromFormat("U", round($_REQUEST['time'] / 1000, 0));
-      $result = $srs->getT2($time->format("d"), $time->format("m"), $time->format("Y"), $_REQUEST['long'], $_REQUEST['lat'], $_REQUEST['diff']);
-      echo json_encode($result);
-      break;
-     * */
+                * case 'getT2':
+                * $time = DateTime::createFromFormat("U", round($_REQUEST['time'] / 1000, 0));
+                * $result = $srs->getT2($time->format("d"), $time->format("m"), $time->format("Y"), $_REQUEST['long'], $_REQUEST['lat'], $_REQUEST['diff']);
+                * echo json_encode($result);
+                * break;
+                */
     case 'getT3':
         $time = DateTime::createFromFormat("U", round($_REQUEST['time'] / 1000, 0));
         $result = $srs->getT3($time->format("d"), $time->format("m"), $time->format("Y"), $_REQUEST['long'], $_REQUEST['lat'], $_REQUEST['diff']);
@@ -685,7 +704,7 @@ switch (@$_REQUEST['cmd']) {
         $result = Array();
         $vdate = DateTime::createFromFormat("d.m.Y H:i:s", "01.01." . date('Y') . " 12:00:00");
         for ($ldate = DateTime::createFromFormat("d.m.Y H:i:s", "01.01." . date('Y') . " 12:00:00"); $ldate->format("U") <= ($vdate->format("U") + (365 * 24 * 60 * 60));) {
-            for ($lat = 86; $lat >= -86; $lat--) {
+            for ($lat = 86; $lat >= - 86; $lat --) {
                 $rdate = $ldate->format("d.m.Y");
 
                 $tm = $srs->get($ldate->format("d"), $ldate->format("m"), $ldate->format("Y"), $_REQUEST['long'], $lat, $_REQUEST['diff']);
@@ -694,7 +713,7 @@ switch (@$_REQUEST['cmd']) {
                 $tmp['long'] = $_REQUEST['long'];
                 $tmp = array_merge($tmp, $tm);
                 $result[] = $tmp;
-                //exit(0);
+                // exit(0);
             }
             $ldate = DateTime::createFromFormat("U", $ldate->format("U") + (24 * 60 * 60));
         }
@@ -705,7 +724,7 @@ switch (@$_REQUEST['cmd']) {
 
         $flag = false;
         foreach ($result as $row) {
-            if (!$flag) {
+            if (! $flag) {
                 // display field/column names as first row
                 echo implode("\t", array_keys($row)) . "\r\n";
                 $flag = true;
@@ -713,9 +732,9 @@ switch (@$_REQUEST['cmd']) {
             array_walk($row, 'cleanData');
             echo implode("\t", array_values($row)) . "\r\n";
         }
-        exit;
+        exit();
 
-        //$result = $sun->getTimes($_REQUEST['time'], $_REQUEST['lat'], $_REQUEST['long']);        
+        // $result = $sun->getTimes($_REQUEST['time'], $_REQUEST['lat'], $_REQUEST['long']);
         break;
     case "getGreenwichTime":
         $result = $srs->getGreenwichTime();
@@ -732,7 +751,7 @@ switch (@$_REQUEST['cmd']) {
             $tmp['long'] = $_REQUEST['long'];
             $tmp = array_merge($tmp, $tm);
             $result[] = $tmp;
-            //exit(0);
+            // exit(0);
             $ldate = DateTime::createFromFormat("U", $ldate->format("U") + (24 * 60 * 60));
         }
         echo json_encode($result);
@@ -749,7 +768,7 @@ switch (@$_REQUEST['cmd']) {
             $tmp['long'] = $_REQUEST['long'];
             $tmp = array_merge($tmp, $tm);
             $result[] = $tmp;
-            //exit(0);
+            // exit(0);
 
             $ldate = DateTime::createFromFormat("U", $ldate->format("U") + (24 * 60 * 60));
         }
@@ -760,7 +779,7 @@ switch (@$_REQUEST['cmd']) {
 
         $flag = false;
         foreach ($result as $row) {
-            if (!$flag) {
+            if (! $flag) {
                 // display field/column names as first row
                 echo implode("\t", array_keys($row)) . "\r\n";
                 $flag = true;
@@ -768,9 +787,9 @@ switch (@$_REQUEST['cmd']) {
             array_walk($row, 'cleanData');
             echo implode("\t", array_values($row)) . "\r\n";
         }
-        exit;
+        exit();
 
-        //$result = $sun->getTimes($_REQUEST['time'], $_REQUEST['lat'], $_REQUEST['long']);        
+        // $result = $sun->getTimes($_REQUEST['time'], $_REQUEST['lat'], $_REQUEST['long']);
         break;
     case 'getFiltered':
         $fp = fopen(dirname(__FILE__) . "/3pr.csv", "r");
@@ -778,7 +797,7 @@ switch (@$_REQUEST['cmd']) {
         if (isset($_REQUEST['val'])) {
             $_REQUEST['val'] = str_replace(",", ".", $_REQUEST['val']);
         }
-        while (!feof($fp)) {
+        while (! feof($fp)) {
             $line = fgets($fp, 1024);
             $line = trim($line);
             if ($line == '') {
@@ -791,14 +810,14 @@ switch (@$_REQUEST['cmd']) {
                 $u2 = round($records[1], 1) === round($_REQUEST['lat'], 1);
             }
 
-            //$u3=round($records[1], 1) === round(@$_REQUEST['lat'], 1);
+            // $u3=round($records[1], 1) === round(@$_REQUEST['lat'], 1);
             if ($u1 && $u2) {
                 $result[] = $records;
             }
         }
         fclose($fp);
         $fp = fopen(dirname(__FILE__) . "/100pr.csv", "r");
-        while (!feof($fp)) {
+        while (! feof($fp)) {
             $line = fgets($fp, 1024);
             $line = trim($line);
             if ($line == '') {
@@ -821,18 +840,18 @@ switch (@$_REQUEST['cmd']) {
     default:
         break;
 }
-//var_dump($argv);
+// var_dump($argv);
 if (@$argv[1] == 'getResults1') {
     $result = Array();
     $_REQUEST['long'] = '36.61280658';
     $_REQUEST['diff'] = 3 * 60 * 60;
     $vdate = DateTime::createFromFormat("d.m.Y H:i:s", "01.01." . date('Y') . " 12:00:00");
     $digits = file(dirname(__FILE__) . "/digits", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    //print_r($digits);
-    //exit();
+    // print_r($digits);
+    // exit();
     for ($ldate = DateTime::createFromFormat("d.m.Y H:i:s", "01.01." . date('Y') . " 12:00:00"); $ldate->format("U") <= ($vdate->format("U") + (364 * 24 * 60 * 60));) {
         echo $ldate->format("d.m.Y") . "\n";
-        for ($lat = 65; $lat >= -65; $lat = round($lat - 0.1, 1)) {
+        for ($lat = 65; $lat >= - 65; $lat = round($lat - 0.1, 1)) {
             $rdate = $ldate->format("d.m.Y");
             $tm = $srs->get($ldate->format("d"), $ldate->format("m"), $ldate->format("Y"), $_REQUEST['long'], $lat, $_REQUEST['diff']);
             $tmp['date'] = $rdate;
@@ -848,25 +867,27 @@ if (@$argv[1] == 'getResults1') {
                 $prc = round($proc * 100, 2);
                 if ($tmp['sun_Zenit_Zenit'] == $val) {
                     file_put_contents(dirname(__FILE__) . "/100pr.csv", "{$tmp['date']};{$lat};{$tmp['sun_Zenit_Zenit']};{$prc}%;{$tmp['day']};{$tmp['night']};{$tmp['day_night_real']};green\n", FILE_APPEND);
-                } else if ($proc <= 0.03 && $proc >= -0.03) {
+                } else if ($proc <= 0.03 && $proc >= - 0.03) {
                     file_put_contents(dirname(__FILE__) . "/3pr.csv", "{$tmp['date']};{$lat};{$tmp['sun_Zenit_Zenit']};{$prc}%;{$tmp['day']};{$tmp['night']};{$tmp['day_night_real']};yellow\n", FILE_APPEND);
                 }
             }
 
-            //$result[] = $tmp;
+            // $result[] = $tmp;
         }
 
         $ldate = DateTime::createFromFormat("U", $ldate->format("U") + (24 * 60 * 60));
     }
 }
 if (@$argv[1] == 'getSeconds') {
-    //echo @$argv[2];
-    echo $srs->getSecondsFrom1900(['dateTimeString' => @$argv[2]]) . "\n";
+    // echo @$argv[2];
+    echo $srs->getSecondsFrom1900([
+        'dateTimeString' => @$argv[2]
+    ]) . "\n";
 }
 if (@$argv[1] == 'loadFile') {
     $fp = fopen(dirname(__FILE__) . "/3pr.csv", "r");
 
-    while (!feof($fp)) {
+    while (! feof($fp)) {
         $line = fgets($fp, 1024);
         $line = trim($line);
         if ($line == '') {
@@ -875,10 +896,10 @@ if (@$argv[1] == 'loadFile') {
         $records = explode(";", $line);
 
         if ($records[2] == @$argv[2]) {
-            //var_dump($records);
+            // var_dump($records);
             echo "{$line}\n";
         }
     }
     fclose($fp);
-    //echo count($lines);
+    // echo count($lines);
 }

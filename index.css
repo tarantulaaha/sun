@@ -1,110 +1,136 @@
-@font-face { font-family: Play; src: url('./font/Play-Regular.ttf'); } 
+@font-face {
+	font-family: Play;
+	src: url('./font/Play-Regular.ttf');
+}
 
 body {
-    background-color: #0d0d0d;
-    color: #106000;
-    font-family: Play;
-    font-size: 14px; 
-    margin:0; 
-    padding:0; 
-    text-align: center;
+	background-color: #0d0d0d;
+	color: #106000;
+	font-family: Play;
+	font-size: 14px;
+	margin: 0;
+	padding: 0;
+	text-align: center;
 }
-.map{
-    opacity: 50%;
-    width:1160px; 
-    height:500px;
-    margin: 15px auto;
-    padding: 5px;
-    border: 1px solid #2dbd00;
+
+.map {
+	opacity: 50%;
+	width: 1160px;
+	height: 500px;
+	margin: 15px auto;
+	padding: 5px;
+	border: 1px solid #2dbd00;
 }
-table{
-    font-size: 12px;
-    border-spacing: 0px;
-    margin: 0px auto;
-    margin-top: 5px;s
-    margin-bottom: 5px;
+
+table {
+	font-size: 12px;
+	border-spacing: 0px;
+	margin: 0px auto;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
-td{
-    border: 1px #0d130c solid;
-    padding: 5px;
-    text-align: center;
+
+td {
+	border: 1px #0d130c solid;
+	padding: 5px;
+	text-align: center;
 }
+
 input, button, select {
-    font-size: 12px;
-    border-radius: 5px;
-    border: 1px solid #106000;
-    margin: 2px;
-    padding: 5px 5px 5px 5px;
-    background-color: #28ff0014 !important;
-    color: #2dbd00;
-    font-family: Play;
-    text-align: center;
-    height: 25px;
+	font-size: 12px;
+	border-radius: 5px;
+	border: 1px solid #106000;
+	margin: 2px;
+	padding: 5px 5px 5px 5px;
+	background-color: #28ff0014 !important;
+	color: #2dbd00;
+	font-family: Play;
+	text-align: center;
+	height: 25px;
 }
 
-
-input[type="checkbox"]{
-    height: 14px;
-    width:14px;
-    top: 3px;
-    position:relative;
-    border: 1px solid #106000;
-}
-input:disabled{
-    color:#106000;
+input[type="checkbox"] {
+	height: 14px;
+	width: 14px;
+	top: 3px;
+	position: relative;
+	border: 1px solid #106000;
 }
 
-button:hover{
-    border: 1px solid #2dbd00;
-    cursor: pointer;
-}
-.border{border: 1px solid black; border-radius: 5px;padding: 5px;margin: 5px;}
-.hasDatepicker{width: 125px;}
-#lat,#long{
-    width: 95px;
-}
-.otstup{
-    padding: 4px;padding-bottom: 6px;
+input:disabled {
+	color: #106000;
 }
 
-.current-weather{
-    text-align: left!important;
+button:hover {
+	border: 1px solid #2dbd00;
+	cursor: pointer;
 }
-.forecasts{
-    margin-top: 0px;
-    width: 1000px;
-    margin: 0 auto;
-    overflow-y: scroll;
-    height: 350px;
+
+.border {
+	border: 1px solid black;
+	border-radius: 5px;
+	padding: 5px;
+	margin: 5px;
 }
-.higlited{
-    color:#2dbd00;
+
+.hasDatepicker {
+	width: 125px;
 }
+
+#lat, #long {
+	width: 95px;
+}
+
+.otstup {
+	padding: 4px;
+	padding-bottom: 6px;
+}
+
+.current-weather {
+	text-align: left !important;
+}
+
+.forecasts {
+	margin-top: 0px;
+	width: 1000px;
+	margin: 0 auto;
+	overflow-y: scroll;
+	height: 350px;
+}
+
+.higlited {
+	color: #2dbd00;
+}
+
 .api {
-    text-align: left;
-    border: 1px solid;
-    padding: 5px;
-    margin: 5px;
-    width: 370px;
-    display: inline-grid;
+	text-align: left;
+	border: 1px solid;
+	padding: 5px;
+	margin: 5px;
+	width: 370px;
+	display: inline-grid;
 }
+
 .p_head {
-    border: 1px solid #2dbd00;
-    padding: 5px;
-    background-color: #26ff0005;
-    font-size: 15px;
-    font-weight: bold;
+	border: 1px solid #2dbd00;
+	padding: 5px;
+	background-color: #26ff0005;
+	font-size: 15px;
+	font-weight: bold;
+	color: #2dbd00;
 }
-.p_body{
-    text-align: left;
+
+.p_body {
+	text-align: left;
 }
-.p_body .content_row{
-    margin: 5px 0px 0px 15px;
+
+.p_body .content_row {
+	margin: 5px 0px 0px 15px;
 }
-.panel{
-    border: 1px solid #106000;
-    padding: 5px;
-    margin: 5px auto;
-    width: 1160px;
-    color:#2dbd00;
+
+.panel {
+	border: 1px solid #106000;
+	padding: 5px;
+	margin: 5px auto;
+	width: 1160px;
 }

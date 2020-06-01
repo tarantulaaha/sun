@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHPExcel
  *
@@ -25,16 +26,16 @@
  * @version    1.8.0, 2014-03-02
  */
 
-
 /**
  * PHPExcel_RichText
  *
- * @category   PHPExcel
- * @package    PHPExcel_RichText
- * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @category PHPExcel
+ * @package PHPExcel_RichText
+ * @copyright Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_RichText implements PHPExcel_IComparable
 {
+
     /**
      * Rich text elements
      *
@@ -58,7 +59,9 @@ class PHPExcel_RichText implements PHPExcel_IComparable
             // Add cell text and style
             if ($pCell->getValue() != "") {
                 $objRun = new PHPExcel_RichText_Run($pCell->getValue());
-                $objRun->setFont(clone $pCell->getParent()->getStyle($pCell->getCoordinate())->getFont());
+                $objRun->setFont(clone $pCell->getParent()
+                    ->getStyle($pCell->getCoordinate())
+                    ->getFont());
                 $this->addText($objRun);
             }
 
@@ -70,7 +73,8 @@ class PHPExcel_RichText implements PHPExcel_IComparable
     /**
      * Add text
      *
-     * @param PHPExcel_RichText_ITextElement $pText Rich text element
+     * @param PHPExcel_RichText_ITextElement $pText
+     *            Rich text element
      * @throws PHPExcel_Exception
      * @return PHPExcel_RichText
      */
@@ -83,7 +87,8 @@ class PHPExcel_RichText implements PHPExcel_IComparable
     /**
      * Create text
      *
-     * @param string $pText Text
+     * @param string $pText
+     *            Text
      * @return PHPExcel_RichText_TextElement
      * @throws PHPExcel_Exception
      */
@@ -97,7 +102,8 @@ class PHPExcel_RichText implements PHPExcel_IComparable
     /**
      * Create text run
      *
-     * @param string $pText Text
+     * @param string $pText
+     *            Text
      * @return PHPExcel_RichText_Run
      * @throws PHPExcel_Exception
      */
@@ -150,7 +156,8 @@ class PHPExcel_RichText implements PHPExcel_IComparable
     /**
      * Set Rich Text elements
      *
-     * @param PHPExcel_RichText_ITextElement[] $pElements Array of elements
+     * @param PHPExcel_RichText_ITextElement[] $pElements
+     *            Array of elements
      * @throws PHPExcel_Exception
      * @return PHPExcel_RichText
      */
@@ -167,7 +174,7 @@ class PHPExcel_RichText implements PHPExcel_IComparable
     /**
      * Get hash code
      *
-     * @return string    Hash code
+     * @return string Hash code
      */
     public function getHashCode()
     {
@@ -176,10 +183,7 @@ class PHPExcel_RichText implements PHPExcel_IComparable
             $hashElements .= $element->getHashCode();
         }
 
-        return md5(
-              $hashElements
-            . __CLASS__
-        );
+        return md5($hashElements . __CLASS__);
     }
 
     /**

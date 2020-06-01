@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHPExcel
  *
@@ -25,50 +26,51 @@
  * @version    1.8.0, 2014-03-02
  */
 
-
 /**
  * PHPExcel_NamedRange
  *
- * @category   PHPExcel
- * @package    PHPExcel
- * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @category PHPExcel
+ * @package PHPExcel
+ * @copyright Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_NamedRange
 {
-	/**
-	 * Range name
-	 *
-	 * @var string
-	 */
-	private $_name;
 
-	/**
-	 * Worksheet on which the named range can be resolved
-	 *
-	 * @var PHPExcel_Worksheet
-	 */
-	private $_worksheet;
+    /**
+     * Range name
+     *
+     * @var string
+     */
+    private $_name;
 
-	/**
-	 * Range of the referenced cells
-	 *
-	 * @var string
-	 */
-	private $_range;
+    /**
+     * Worksheet on which the named range can be resolved
+     *
+     * @var PHPExcel_Worksheet
+     */
+    private $_worksheet;
 
-	/**
-	 * Is the named range local? (i.e. can only be used on $this->_worksheet)
-	 *
-	 * @var bool
-	 */
-	private $_localOnly;
+    /**
+     * Range of the referenced cells
+     *
+     * @var string
+     */
+    private $_range;
 
-	/**
-	 * Scope
-	 *
-	 * @var PHPExcel_Worksheet
-	 */
-	private $_scope;
+    /**
+     * Is the named range local? (i.e.
+     * can only be used on $this->_worksheet)
+     *
+     * @var bool
+     */
+    private $_localOnly;
+
+    /**
+     * Scope
+     *
+     * @var PHPExcel_Worksheet
+     */
+    private $_scope;
 
     /**
      * Create a new NamedRange
@@ -77,23 +79,23 @@ class PHPExcel_NamedRange
      * @param PHPExcel_Worksheet $pWorksheet
      * @param string $pRange
      * @param bool $pLocalOnly
-     * @param PHPExcel_Worksheet|null $pScope	Scope. Only applies when $pLocalOnly = true. Null for global scope.
+     * @param PHPExcel_Worksheet|null $pScope
+     *            Scope. Only applies when $pLocalOnly = true. Null for global scope.
      * @throws PHPExcel_Exception
      */
     public function __construct($pName = null, PHPExcel_Worksheet $pWorksheet, $pRange = 'A1', $pLocalOnly = false, $pScope = null)
     {
-    	// Validate data
-    	if (($pName === NULL) || ($pWorksheet === NULL) || ($pRange === NULL)) {
-    		throw new PHPExcel_Exception('Parameters can not be null.');
-    	}
+        // Validate data
+        if (($pName === NULL) || ($pWorksheet === NULL) || ($pRange === NULL)) {
+            throw new PHPExcel_Exception('Parameters can not be null.');
+        }
 
-    	// Set local members
-    	$this->_name 		= $pName;
-    	$this->_worksheet 	= $pWorksheet;
-    	$this->_range 		= $pRange;
-    	$this->_localOnly 	= $pLocalOnly;
-    	$this->_scope 		= ($pLocalOnly == true) ?
-								(($pScope == null) ? $pWorksheet : $pScope) : null;
+        // Set local members
+        $this->_name = $pName;
+        $this->_worksheet = $pWorksheet;
+        $this->_range = $pRange;
+        $this->_localOnly = $pLocalOnly;
+        $this->_scope = ($pLocalOnly == true) ? (($pScope == null) ? $pWorksheet : $pScope) : null;
     }
 
     /**
@@ -101,8 +103,9 @@ class PHPExcel_NamedRange
      *
      * @return string
      */
-    public function getName() {
-    	return $this->_name;
+    public function getName()
+    {
+        return $this->_name;
     }
 
     /**
@@ -111,26 +114,27 @@ class PHPExcel_NamedRange
      * @param string $value
      * @return PHPExcel_NamedRange
      */
-    public function setName($value = null) {
-    	if ($value !== NULL) {
-    		// Old title
-    		$oldTitle = $this->_name;
+    public function setName($value = null)
+    {
+        if ($value !== NULL) {
+            // Old title
+            $oldTitle = $this->_name;
 
-    		// Re-attach
-    		if ($this->_worksheet !== NULL) {
-    			$this->_worksheet->getParent()->removeNamedRange($this->_name,$this->_worksheet);
-    		}
-    		$this->_name = $value;
+            // Re-attach
+            if ($this->_worksheet !== NULL) {
+                $this->_worksheet->getParent()->removeNamedRange($this->_name, $this->_worksheet);
+            }
+            $this->_name = $value;
 
-    		if ($this->_worksheet !== NULL) {
-    			$this->_worksheet->getParent()->addNamedRange($this);
-    		}
+            if ($this->_worksheet !== NULL) {
+                $this->_worksheet->getParent()->addNamedRange($this);
+            }
 
-	    	// New title
-	    	$newTitle = $this->_name;
-	    	PHPExcel_ReferenceHelper::getInstance()->updateNamedFormulas($this->_worksheet->getParent(), $oldTitle, $newTitle);
-    	}
-    	return $this;
+            // New title
+            $newTitle = $this->_name;
+            PHPExcel_ReferenceHelper::getInstance()->updateNamedFormulas($this->_worksheet->getParent(), $oldTitle, $newTitle);
+        }
+        return $this;
     }
 
     /**
@@ -138,8 +142,9 @@ class PHPExcel_NamedRange
      *
      * @return PHPExcel_Worksheet
      */
-    public function getWorksheet() {
-    	return $this->_worksheet;
+    public function getWorksheet()
+    {
+        return $this->_worksheet;
     }
 
     /**
@@ -148,11 +153,12 @@ class PHPExcel_NamedRange
      * @param PHPExcel_Worksheet $value
      * @return PHPExcel_NamedRange
      */
-    public function setWorksheet(PHPExcel_Worksheet $value = null) {
-    	if ($value !== NULL) {
-    		$this->_worksheet = $value;
-    	}
-    	return $this;
+    public function setWorksheet(PHPExcel_Worksheet $value = null)
+    {
+        if ($value !== NULL) {
+            $this->_worksheet = $value;
+        }
+        return $this;
     }
 
     /**
@@ -160,8 +166,9 @@ class PHPExcel_NamedRange
      *
      * @return string
      */
-    public function getRange() {
-    	return $this->_range;
+    public function getRange()
+    {
+        return $this->_range;
     }
 
     /**
@@ -170,11 +177,12 @@ class PHPExcel_NamedRange
      * @param string $value
      * @return PHPExcel_NamedRange
      */
-    public function setRange($value = null) {
-    	if ($value !== NULL) {
-    		$this->_range = $value;
-    	}
-    	return $this;
+    public function setRange($value = null)
+    {
+        if ($value !== NULL) {
+            $this->_range = $value;
+        }
+        return $this;
     }
 
     /**
@@ -182,8 +190,9 @@ class PHPExcel_NamedRange
      *
      * @return bool
      */
-    public function getLocalOnly() {
-    	return $this->_localOnly;
+    public function getLocalOnly()
+    {
+        return $this->_localOnly;
     }
 
     /**
@@ -192,10 +201,11 @@ class PHPExcel_NamedRange
      * @param bool $value
      * @return PHPExcel_NamedRange
      */
-    public function setLocalOnly($value = false) {
-    	$this->_localOnly = $value;
-    	$this->_scope = $value ? $this->_worksheet : null;
-    	return $this;
+    public function setLocalOnly($value = false)
+    {
+        $this->_localOnly = $value;
+        $this->_scope = $value ? $this->_worksheet : null;
+        return $this;
     }
 
     /**
@@ -203,8 +213,9 @@ class PHPExcel_NamedRange
      *
      * @return PHPExcel_Worksheet|null
      */
-    public function getScope() {
-    	return $this->_scope;
+    public function getScope()
+    {
+        return $this->_scope;
     }
 
     /**
@@ -213,34 +224,39 @@ class PHPExcel_NamedRange
      * @param PHPExcel_Worksheet|null $value
      * @return PHPExcel_NamedRange
      */
-    public function setScope(PHPExcel_Worksheet $value = null) {
-    	$this->_scope = $value;
-    	$this->_localOnly = ($value == null) ? false : true;
-    	return $this;
+    public function setScope(PHPExcel_Worksheet $value = null)
+    {
+        $this->_scope = $value;
+        $this->_localOnly = ($value == null) ? false : true;
+        return $this;
     }
 
     /**
      * Resolve a named range to a regular cell range
      *
-     * @param string $pNamedRange Named range
-     * @param PHPExcel_Worksheet|null $pSheet Scope. Use null for global scope
+     * @param string $pNamedRange
+     *            Named range
+     * @param PHPExcel_Worksheet|null $pSheet
+     *            Scope. Use null for global scope
      * @return PHPExcel_NamedRange
      */
-    public static function resolveRange($pNamedRange = '', PHPExcel_Worksheet $pSheet) {
-		return $pSheet->getParent()->getNamedRange($pNamedRange, $pSheet);
+    public static function resolveRange($pNamedRange = '', PHPExcel_Worksheet $pSheet)
+    {
+        return $pSheet->getParent()->getNamedRange($pNamedRange, $pSheet);
     }
 
-	/**
-	 * Implement PHP __clone to create a deep clone, not just a shallow copy.
-	 */
-	public function __clone() {
-		$vars = get_object_vars($this);
-		foreach ($vars as $key => $value) {
-			if (is_object($value)) {
-				$this->$key = clone $value;
-			} else {
-				$this->$key = $value;
-			}
-		}
-	}
+    /**
+     * Implement PHP __clone to create a deep clone, not just a shallow copy.
+     */
+    public function __clone()
+    {
+        $vars = get_object_vars($this);
+        foreach ($vars as $key => $value) {
+            if (is_object($value)) {
+                $this->$key = clone $value;
+            } else {
+                $this->$key = $value;
+            }
+        }
+    }
 }
