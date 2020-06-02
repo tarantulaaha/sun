@@ -10,7 +10,6 @@ body {
 	font-size: 14px;
 	margin: 0;
 	padding: 0;
-	text-align: center;
 }
 
 .map {
@@ -47,14 +46,6 @@ input, button, select {
 	font-family: Play;
 	text-align: center;
 	height: 25px;
-}
-
-input[type="checkbox"] {
-	height: 14px;
-	width: 14px;
-	top: 3px;
-	position: relative;
-	border: 1px solid #106000;
 }
 
 input:disabled {
@@ -112,20 +103,40 @@ button:hover {
 }
 
 .p_head {
-	border: 1px solid #2dbd00;
+	border: 1px solid #106000;
 	padding: 5px;
 	background-color: #26ff0005;
 	font-size: 15px;
 	font-weight: bold;
-	color: #2dbd00;
+	color: #257118;
+	margin-bottom: 10px;
+	text-align: center;
 }
 
 .p_body {
 	text-align: left;
+	width: 100%;
+	display: table;
 }
 
 .p_body .content_row {
-	margin: 5px 0px 0px 15px;
+	
+}
+
+.content_description {
+	display: block;
+}
+
+.p_body .content_description {
+	color: #2dbd00;
+	border-bottom: 1px solid #2dbd00;
+	padding: 0px;
+	margin: 0px 0px 10px 5px;
+	display: table;
+}
+
+.p_body .content_description:before {
+	content: " # ";
 }
 
 .panel {
@@ -133,4 +144,89 @@ button:hover {
 	padding: 5px;
 	margin: 5px auto;
 	width: 1160px;
+}
+
+.panel .panel {
+	border: 1px solid #106000;
+	padding: 5px;
+	margin: 5px auto;
+	width: 98%;
+}
+
+.panel .content_description {
+	color: #2dbd00;
+	padding: 0px;
+	margin: 0px 0px 10px 5px;
+	text-align: left;
+}
+
+.panel .content_description:before {
+	content: "/* ";
+}
+
+.panel .content_description:after {
+	content: " */ ";
+}
+
+span.dark {
+	color: #106000;
+}
+
+a {
+	color: #2dbd00;
+	text-decoration: none;
+	border-bottom: 1px dotted #106000;
+}
+
+input[type="checkbox"] {
+	display: none;
+}
+
+input[type="checkbox"]+label {
+	padding: 10px 0;
+	vertical-align: middle;
+	height: 14px;
+	cursor: pointer;
+}
+
+[type="checkbox"]+label:before {
+	content: " ";
+	display: inline-block;
+	margin: 0px 5px 0px 15px;
+	text-align: center;
+	text-indent: 0px;
+	width: 17px;
+	height: 17px;
+	background: #FFF;
+	border-image: initial;
+	vertical-align: middle;
+	border: 1px solid #106000;
+	background-color: #28ff0014;
+}
+
+input:checked+label:before {
+	/* глифон - галочка */
+	content: "X";
+	color: #2dbd00;
+}
+
+input:checked+label {
+	color: #2dbd00;
+}
+
+input:disabled+label:before {
+	background: #eee;
+	color: #aaa;
+}
+
+.tabbed {
+	margin-left: 15px;
+}
+
+.column {
+	float: left;
+	width: 25%;
+}
+.center{
+	text-align: center;
 }
