@@ -3,19 +3,22 @@ header('Content-Type: text/html; charset= utf-8');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(- 1);
-require_once './simple_html_dom.php';
+//require_once $_SERVER ['DOCUMENT_ROOT'].'/../lib.bra1nw0rk.com/Preloader.php';
+//require_once $_SERVER ['DOCUMENT_ROOT'].'/../lib.bra1nw0rk.com/lib/Http.php';
+include_once $_SERVER ['DOCUMENT_ROOT'].'/../lib.bra1nw0rk.com/lib/simple_html/HtmlDocument.php';
+//require_once './simple_html_dom.php';
 ?>
 <html>
 <head>
 
 <meta charset="UTF-8">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<script type="text/javascript"
+<script defer type="text/javascript"
 	src="//api-maps.yandex.ru/2.0/?load=package.standard&lang=ru-RU"></script>
 <script src="jquery/jquery.js" type="text/javascript"></script>
 <script src="jqueryui/jquery-ui.js" type="text/javascript"></script>
 
-<script type="text/javascript" src="js/index.js"></script>
+<script defer type="text/javascript" src="js/index.js"></script>
 <link href="jqueryui/css/base/jquery-ui.css" rel="stylesheet"
 	type="text/css" />
 
