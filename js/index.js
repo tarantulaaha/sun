@@ -96,7 +96,9 @@ function getValues() {
 		$('#calculation #visible_invisible_nod').text(times.visible_invisible_nod);
 		// $('#calculation
 		// #sun_Zenit_Zenit').text(times.sun_Zenit_Zenit);
-
+		$('html,body').animate({
+			scrollTop: $('#calculation')[0].offsetTop
+		},2000);
 	});
 	$.post("srs2.php", {
 		cmd: 'getT3',
@@ -171,6 +173,9 @@ function getZenitTableFromServer() {
 			row.append("<td>" + val.moonInvisible + "</td>");
 			row.append("<td> " + val.visible_invisible_real + " </td>");
 		});
+		$('html,body').animate({
+			scrollTop:$('#zenitTable')[0].offsetTop
+		},2000);
 	});
 }
 function downloadZenitTableFromServer() {
@@ -255,13 +260,13 @@ $(function () {
 		} else {
 			options.long = '';
 		}
-		$("#filterFind").text("Идет поиск...");
+		$("#filterFind").text("Searching...");
 		$("#filterTable tbody").text("");
 		$("#filterTable").hide();
 		$.post("srs2.php", options, function (data) {
 			table = JSON.parse(data);
 			$("#filterTable").show();
-			$("#filterFind").text("Найти");
+			$("#filterFind").text("Search");
 			$.each(table, function (p, val) {
 				row = $("#filterTable tbody").append("<tr></tr>");
 				row.append("<td>" + val[0] + "</td>");
@@ -275,7 +280,7 @@ $(function () {
 			});
 			if (Object.keys(table).length === 0) {
 				row = $("#filterTable tbody").append("<tr></tr>");
-				row.append("<td colspan='7' >Ничего не найдено.</td>");
+				row.append("<td colspan='7' >Nothing found.</td>");
 			}
 		});
 	});

@@ -10,11 +10,10 @@ include_once $_SERVER ['DOCUMENT_ROOT'].'/../lib.bra1nw0rk.com/lib/simple_html/H
 ?>
 <html>
 <head>
-
 <meta charset="UTF-8">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <script defer type="text/javascript"
-	src="//api-maps.yandex.ru/2.0/?load=package.standard&lang=ru-RU"></script>
+	src="//proxy.bra1nw0rk.com/☆api-maps.yandex.ru/2.0/?load=package.standard&lang=ru-RU"></script>
 <script src="jquery/jquery.js" type="text/javascript"></script>
 <script src="jqueryui/jquery-ui.js" type="text/javascript"></script>
 
@@ -23,7 +22,7 @@ include_once $_SERVER ['DOCUMENT_ROOT'].'/../lib.bra1nw0rk.com/lib/simple_html/H
 	type="text/css" />
 
 <link rel="stylesheet" type="text/css"
-	href="https://yastatic.net/weather-frontend/3.14.4/desktop.bundles/index/_index.css" />
+	href="//proxy.bra1nw0rk.com/☆yastatic.net/weather-frontend/3.14.4/desktop.bundles/index/_index.css" />
 <link rel="stylesheet" type="text/css" href="index.css" />
 <title></title>
 </head>

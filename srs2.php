@@ -792,49 +792,53 @@ switch (@$_REQUEST['cmd']) {
         // $result = $sun->getTimes($_REQUEST['time'], $_REQUEST['lat'], $_REQUEST['long']);
         break;
     case 'getFiltered':
-        $fp = fopen(dirname(__FILE__) . "/3pr.csv", "r");
-        $result = [];
-        if (isset($_REQUEST['val'])) {
-            $_REQUEST['val'] = str_replace(",", ".", $_REQUEST['val']);
-        }
-        while (! feof($fp)) {
-            $line = fgets($fp, 1024);
-            $line = trim($line);
-            if ($line == '') {
-                continue;
+        if(file_exists(dirname(__FILE__) . "/3pr.csv")) {
+            $fp = fopen(dirname(__FILE__) . "/3pr.csv", "r");
+            $result = [];
+            if (isset($_REQUEST['val'])) {
+                $_REQUEST['val'] = str_replace(",", ".", $_REQUEST['val']);
             }
-            $records = explode(";", $line);
-            $u1 = round($records[2], 3) === round(@$_REQUEST['val'], 3);
-            $u2 = true;
-            if ($_REQUEST['lat'] !== '') {
-                $u2 = round($records[1], 1) === round($_REQUEST['lat'], 1);
-            }
+            while (!feof($fp)) {
+                $line = fgets($fp, 1024);
+                $line = trim($line);
+                if ($line == '') {
+                    continue;
+                }
+                $records = explode(";", $line);
+                $u1 = round($records[2], 3) === round(@$_REQUEST['val'], 3);
+                $u2 = true;
+                if ($_REQUEST['lat'] !== '') {
+                    $u2 = round($records[1], 1) === round($_REQUEST['lat'], 1);
+                }
 
-            // $u3=round($records[1], 1) === round(@$_REQUEST['lat'], 1);
-            if ($u1 && $u2) {
-                $result[] = $records;
+                // $u3=round($records[1], 1) === round(@$_REQUEST['lat'], 1);
+                if ($u1 && $u2) {
+                    $result[] = $records;
+                }
             }
+            fclose($fp);
+            $fp = fopen(dirname(__FILE__) . "/100pr.csv", "r");
+            while (!feof($fp)) {
+                $line = fgets($fp, 1024);
+                $line = trim($line);
+                if ($line == '') {
+                    continue;
+                }
+                $records = explode(";", $line);
+                $u1 = round($records[2], 3) == round(@$_REQUEST['val'], 3);
+                $u2 = true;
+                if ($_REQUEST['lat'] !== '') {
+                    $u2 = round($records[1], 1) == round($_REQUEST['lat'], 1);
+                }
+                if ($u1 && $u2) {
+                    $result[] = $records;
+                }
+            }
+            fclose($fp);
+            echo json_encode($result);
+        }else{
+            echo json_encode([]);
         }
-        fclose($fp);
-        $fp = fopen(dirname(__FILE__) . "/100pr.csv", "r");
-        while (! feof($fp)) {
-            $line = fgets($fp, 1024);
-            $line = trim($line);
-            if ($line == '') {
-                continue;
-            }
-            $records = explode(";", $line);
-            $u1 = round($records[2], 3) == round(@$_REQUEST['val'], 3);
-            $u2 = true;
-            if ($_REQUEST['lat'] !== '') {
-                $u2 = round($records[1], 1) == round($_REQUEST['lat'], 1);
-            }
-            if ($u1 && $u2) {
-                $result[] = $records;
-            }
-        }
-        fclose($fp);
-        echo json_encode($result);
         break;
 
     default:
